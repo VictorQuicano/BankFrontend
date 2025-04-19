@@ -1,9 +1,18 @@
-import { useEffect, useState } from "react";
-import { Appearance, ColorSchemeName, Platform } from "react-native";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { Appearance, Platform } from "react-native";
 
 type ColorScheme = "light" | "dark";
 
-export function useColorScheme() {
+interface ColorSchemeContextType {
+  colorScheme: ColorScheme;
+  toggleColorScheme: () => void;
+}
+
+const ColorSchemeContext = createContext<ColorSchemeContextType | undefined>(
+  undefined
+);
+
+export const ColorSchemeProvider = ({ children }: { children: ReactNode }) => {
   const getSystemColorScheme = (): ColorScheme =>
     Platform.OS === "web"
       ? window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -39,5 +48,19 @@ export function useColorScheme() {
     setColorScheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-  return { colorScheme, toggleColorScheme };
-}
+  return (
+    <ColorSchemeContext.Provider value={{ colorScheme, toggleColorScheme }}>
+      {children}
+    </ColorSchemeContext.Provider>
+  );
+};
+
+export const useColorSchemeContext = () => {
+  const context = useContext(ColorSchemeContext);
+  if (!context) {
+    throw new Error(
+      "useColorSchemeContext must be used within a ColorSchemeProvider"
+    );
+  }
+  return context;
+};

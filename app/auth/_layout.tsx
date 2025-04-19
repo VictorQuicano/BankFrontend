@@ -19,16 +19,10 @@ function InnerLayout() {
         headerShown: false,
         contentStyle: {
           backgroundColor: colorScheme === "dark" ? DarkTheme.colors.background : DefaultTheme.colors.background,
-  
         },
       }}
     >
-      <Stack.Screen name="index"  options={{ title: "Home"}} />
-      <Stack.Screen
-          name="login"
-  
-          options={{ title: "Login" }} // Título del encabezado en la pantalla de Login
-        />
+      <Stack.Screen name="index" options={{ title: "Session" }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
